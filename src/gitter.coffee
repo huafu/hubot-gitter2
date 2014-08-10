@@ -106,7 +106,7 @@ class GitterAdapter extends Adapter
       @_resolveRoom(uri, yes, (err, room) =>
         return @_log 'error', "unable to join room #{ uri }" if err
         # registering known users
-        @gitter.users()
+        room.users()
         .then((users) -> console.log 'USERS', users)
         .fail((err) -> console.log 'USERS FAIL', err)
       )
