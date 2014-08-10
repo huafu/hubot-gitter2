@@ -215,7 +215,6 @@ class GitterAdapter extends Adapter
     r
 
 
-
   # Private: Get a known room object with the given property lookup
   #
   # property - The property to look for. Default: 'id'
@@ -305,7 +304,7 @@ class GitterAdapter extends Adapter
   #
   # userData - An object representing user data
   _resolveHubotUser: (userData) ->
-    throw new Error("Invalid user data given #{ userData }") unless userData?.id
+    throw new Error("Invalid user data given #{ userData }") unless userData?.id and userData.id isnt 'undefined'
     userId = "#{userData.id}"
     props =
       id: userData.id
