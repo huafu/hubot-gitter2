@@ -176,6 +176,7 @@ class GitterAdapter extends Adapter
     if (r = @_knownRooms[id])
       r.name = room.name
     else
+      @_log "registered new room #{ room.uri }"
       @_knownRooms[id] = r = room
       r.listen()
     if arguments.length is 2
@@ -213,6 +214,7 @@ class GitterAdapter extends Adapter
       if Boolean(joined) isnt Boolean(room._joined)
         # we need to start/stop listening to new messages on that room
         room.events["#{ if joined then 'add' else 'remove' }Listener"] '*', @_handleRoomEvent.bind(@, room)
+        @_log "#{ if joined then 'started' else 'stopped' } listening events from #{ room.uri }"
       room._joined = Boolean joined
     Boolean room._joined
 
