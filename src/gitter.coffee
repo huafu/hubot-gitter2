@@ -97,6 +97,7 @@ class GitterAdapter extends Adapter
       @_resolveRoom(uri, yes, (err, room) ->
         @_log 'error', "unable to join room #{ uri }" if err
       )
+    # we are connected, ready to start
     @emit 'connected'
 
 
@@ -112,7 +113,7 @@ class GitterAdapter extends Adapter
   # join      - Defines whether to join or not the room. Default: false
   # callback  - The method to call when the room is found or if error
   _resolveRoom: (uriOrRoom, join, callback) ->
-    @_log "_resolveRoom(#{ Array::join.call arguments, ', ' })"
+    #@_log "_resolveRoom(#{ Array::join.call arguments, ', ' })"
     if arguments.length < 3
       callback = join
       join = no
@@ -156,7 +157,7 @@ class GitterAdapter extends Adapter
   # uri      - The URI of the room to join
   # callback - The closure to call once joined or in error
   _joinRoom: (uri, callback) ->
-    @_log "_joinRoom(#{ Array::join.call arguments, ', ' })"
+    #@_log "_joinRoom(#{ Array::join.call arguments, ', ' })"
     throw new Error("Invalid room URI: #{ uri }") unless uri and (typeof(uri) is 'string' or uri instanceof String)
     @gitter.rooms.join(uri, (err, room) =>
       if err
@@ -173,7 +174,7 @@ class GitterAdapter extends Adapter
   # room   - The room object to register or update
   # joined - Whether to register the room as joined/left
   _registerRoom: (room, joined) ->
-    @_log "_registerRoom(#{ room.uri })"
+    #@_log "_registerRoom(#{ room.uri })"
     throw new Error("invalid room") unless room?.id and room?.uri
     id = "#{room.id}"
     if (r = @_knownRooms[id])
@@ -198,7 +199,7 @@ class GitterAdapter extends Adapter
   # property - The property to look for. Default: 'id'
   # value    - The searched value for that property
   _findRoomBy: (property, value) ->
-    @_log "_findRoomBy(#{ Array::join.call arguments, ', ' })"
+    #@_log "_findRoomBy(#{ Array::join.call arguments, ', ' })"
     if arguments.length is 1
       value = property
       property = 'id'
@@ -217,13 +218,13 @@ class GitterAdapter extends Adapter
   # room   - The room object
   # joined - If set, will flag the room as joined or not
   _hasJoinedRoom: (room, joined) ->
-    @_log "_hasJoinedRoom(#{ Array::join.call arguments, ', ' })"
+    #@_log "_hasJoinedRoom(#{ Array::join.call arguments, ', ' })"
     if arguments.length is 2
       if Boolean(joined) isnt Boolean(room._joined)
         # we need to start/stop listening to new messages on that room
         method = room.events[if joined then 'on' else 'off'].bind room.events
         for event in ROOM_EVENTS
-          method event, @_handleRoomEvent.bind(@, room)
+          method event, @_handleRoomEvent.bind(@, event, room)
         @_log "#{ if joined then 'started' else 'stopped' } listening events from #{ room.uri }"
       room._joined = Boolean joined
     Boolean room._joined
@@ -231,11 +232,38 @@ class GitterAdapter extends Adapter
 
   # Private: Handles a room event
   #
+  # event - The event name
   # room  - The room which received the event
-  # event - The event
-  _handleRoomEvent: (room, event) ->
-    @_log "_handleRoomEvent(#{ Array::join.call(arguments, ', ') })"
-    console.log 'ROOM EVENT', arguments...
+  _handleRoomEvent: (event, room, eventArgs...) ->
+    #@_log "_handleRoomEvent(#{ Array::join.call(arguments, ', ') })"
+    #console.log 'ROOM EVENT', arguments...
+    switch event
+
+      # a message has been sent
+      when 'message'
+        # we need to receive the message only if it is from someone else than the bot
+        message = eventArgs[0]
+        sender = @_resolveHubotUser message.fromUser
+        # we need to have the bot's user
+        @_resolveHubotSelfUser((err, bot) =>
+          return @_log 'error', "unable to find hubot user: #{ err }" if err
+          console.log "SENDER, ME", sender, bot
+          # handle the message only if it is not from the bot itself
+          unless sender.id is bot.id
+            sender.room = room.id
+            msg = new TextMessage sender, message.text, message.id
+            message.private = room.oneToOne
+            try
+              @robot.receive msg
+            catch err
+              @_log 'error', txt = "error handling message #{ msg.id }"
+              console.log txt, msg
+        )
+
+      else
+        @_log "unhandled event #{ event } from room #{ room.uri }"
+    # be sure to not return anything
+    return
 
 
   # Private: log a message (debug by default)
@@ -247,6 +275,27 @@ class GitterAdapter extends Adapter
       message = level
       level = 'debug'
     @robot.logger[level] "[GITTER2] #{ message }"
+
+
+  # Private: register a user or update it
+  #
+  # userData - An object representing user data
+  _resolveHubotUser: (userData) ->
+    throw new Error("Invalid user data given #{ userData }") unless userData?.id
+    userId = "#{userData.id}"
+    res = @robot.brain.userForId userId, userData
+    @robot.brain.data.users[userId].name = userData.displayName if userData.displayName
+    res
+
+
+  # Private: Get the robot user object
+  _resolveHubotSelfUser: (callback) ->
+    @gitter.currentUser (err, user) =>
+      return callback err if err
+      try
+        callback null, @_resolveHubotUser user
+      catch err
+        callback err
 
 
 exports.use = (robot) -> new GitterAdapter(robot)
