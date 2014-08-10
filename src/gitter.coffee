@@ -42,7 +42,10 @@ class GitterAdapter extends Adapter
           text = lines.join('\n')
           if text is ''
             @_log 'warning', "not sending an empty message in room #{ room.uri }"
+          else if not room.send? or not (typeof(room.send) is "function" or room.send instanceof Function)
+            @_log 'error', "found the room, but it has no method `send`: #{ room.send }"
           else
+            @_log "sending a message to the room #{ room.uri }"
             room.send text, (err) =>
               @_log 'error', "error sending message to room #{ room.uri }: #{ err }" if err
         )
