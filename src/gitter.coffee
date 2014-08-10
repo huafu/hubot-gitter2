@@ -54,7 +54,7 @@ class GitterAdapter extends Adapter
               chunk.push lines.shift()
               size += ls
             # we create a new chunk with all possible lines that we could join
-            chunks.push chunck.join('\n')
+            chunks.push chunk.join('\n')
           # now we have optimized the # of messages
           lines = chunks
           if lines.length isnt realTotal
