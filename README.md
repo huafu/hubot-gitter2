@@ -1,4 +1,4 @@
-hubot-gitter-adapter
-====================
+gitter-adapter2
+===============
 
-Hubot adapter for Gitter
+Improved Hubot adapter for Gitter
