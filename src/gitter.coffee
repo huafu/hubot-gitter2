@@ -276,6 +276,7 @@ class GitterAdapter extends Adapter
             message.private = room.oneToOne
             try
               @robot.receive msg
+              @_log "handled message #{ msg.id }"
             catch err
               @_log 'error', txt = "error handling message #{ msg.id }"
               console.log txt, msg
