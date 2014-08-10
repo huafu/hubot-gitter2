@@ -89,7 +89,7 @@ class GitterAdapter extends Adapter
       @_log 'error', err = 'you must define HUBOT_GITTER_TOKEN to use Gitter adapter'
       throw new Error(err)
     @gitter = new Gitter(token)
-    for uri in rooms.split(/\s*,\s*/g) when room isnt ''
+    for uri in rooms.split(/\s*,\s*/g) when uri isnt ''
       @_resolveRoom uri, yes, (err, room) -> @_log 'error', "unable to join room #{ uri }" if err
     @emit 'connected'
 
