@@ -103,7 +103,7 @@ class GitterAdapter extends Adapter
     # joining rooms
     @_log "rooms to join: #{ rooms }"
     for uri in rooms.split(/\s*,\s*/g) when uri isnt ''
-      @_resolveRoom(uri, yes, (err, room) ->
+      @_resolveRoom(uri, yes, (err, room) =>
         return @_log 'error', "unable to join room #{ uri }" if err
         # registering known users
         @gitter.users()
