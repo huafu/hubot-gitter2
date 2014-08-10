@@ -14,6 +14,7 @@ class GitterAdapter extends Adapter
   constructor: (@robot) ->
     super
     @_knownRooms = {}
+    @_knownUsers = {}
 
 
   # Public: Raw method for sending data back to the chat source. Extend this.
@@ -44,7 +45,7 @@ class GitterAdapter extends Adapter
             @_log 'warning', "not sending an empty message in room #{ room.uri }"
           else
             room.send text, (err) =>
-              @_log 'error', "error sending message to room #{ room.uri }: #{ text }"
+              @_log 'error', "error sending message to room #{ room.uri }: #{ text }" if err
         )
 
 
@@ -99,10 +100,15 @@ class GitterAdapter extends Adapter
       @_log 'error', err = 'you must define HUBOT_GITTER_TOKEN to use Gitter adapter'
       throw new Error(err)
     @gitter = new Gitter(token)
+    # joining rooms
     @_log "rooms to join: #{ rooms }"
     for uri in rooms.split(/\s*,\s*/g) when uri isnt ''
       @_resolveRoom(uri, yes, (err, room) ->
-        @_log 'error', "unable to join room #{ uri }" if err
+        return @_log 'error', "unable to join room #{ uri }" if err
+        # registering known users
+        @gitter.users()
+        .then((users) -> console.log 'USERS', users)
+        .fail((err) -> console.log 'USERS FAIL', err)
       )
     # we are connected, ready to start
     @emit 'connected'
