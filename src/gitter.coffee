@@ -6,7 +6,7 @@ Gitter                = require 'node-gitter'
 
 ROOM_EVENTS = ['message']
 ROOM_ID_REGEXP = /^[a-f0-9]{24}$/
-MAX_MESSAGE_SIZE = 1024
+MAX_MESSAGE_SIZE = 256
 
 class GitterAdapter extends Adapter
   # An adapter is a specific interface to a chat source for robots.
@@ -50,13 +50,14 @@ class GitterAdapter extends Adapter
             size = 0
             while lines.length
               # here we check if we have at least one line in the chunk else we'll loop infinitely
-              break if chunk.length > 0 and size + (ls = lines[0].length + 1) >= MAX_MESSAGE_SIZE
+              ls = lines[0].length + 1
+              break if chunk.length > 0 and size + ls >= MAX_MESSAGE_SIZE
               chunk.push lines.shift()
               size += ls
             # we create a new chunk with all possible lines that we could join
             chunks.push chunk.join('\n')
           # now we have optimized the # of messages
-          lines = chunks
+          lines = chunks.slice()
           if lines.length isnt realTotal
             @_log "compressed #{ realTotal } lines into #{ lines.length }"
           # now we can send all lines
