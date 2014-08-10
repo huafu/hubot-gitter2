@@ -73,6 +73,7 @@ class GitterAdapter extends Adapter
               if err
                 still = " (#{ lines.length + 1 } of #{ total } line(s) not sent)"
                 @_log 'error', "error sending a message to room #{ room.uri }#{ still }: #{ err }"
+                room.send "`hubot adapter` : #{ err }"
               else if (line = lines.shift())
                 room.send(line).then(-> next()).fail(next)
               else
