@@ -67,6 +67,12 @@ class GitterAdapter extends Adapter
   #
   # Returns nothing.
   reply: (envelope, strings...) ->
+    room = envelope.room or envelope.message?.room or envelope.message?.user?.room or envelope.user?.room
+    if room
+      @send {room}, strings...
+    else
+      @_log 'error', "failed to reply to #{ envelope }"
+      console.log "failed to reply to", envelope
 
 
   # Public: Raw method for setting a topic on the chat source. Extend this.
