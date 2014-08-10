@@ -44,7 +44,7 @@ class GitterAdapter extends Adapter
             @_log 'warning', "not sending an empty message in room #{ room.uri }"
           else
             room.send text, (err) =>
-              @_log 'error', "error sending message to room #{ room.uri }: #{ text }" if err
+              @_log 'error', "error sending message to room #{ room.uri }: #{ err }" if err
         )
 
 
