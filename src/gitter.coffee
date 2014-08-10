@@ -6,7 +6,7 @@ Gitter                = require 'node-gitter'
 
 ROOM_EVENTS = ['message']
 ROOM_ID_REGEXP = /^[a-f0-9]{24}$/
-MAX_MESSAGE_SIZE = 256
+MAX_MESSAGE_SIZE = 1024
 
 class GitterAdapter extends Adapter
   # An adapter is a specific interface to a chat source for robots.
