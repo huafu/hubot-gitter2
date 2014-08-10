@@ -29,6 +29,7 @@ class GitterAdapter extends Adapter
         string()
         @send envelope, strings...
       else
+        strings.unshift(string)
         # find the room, and send the message to it
         @_resolveRoom(envelope.room, yes, (err, room) =>
           return @_log 'error', "unable to find/join room #{ envelope.room }: #{ err }" if err
@@ -38,7 +39,12 @@ class GitterAdapter extends Adapter
               lines.push ''
             else
               lines.push "#{ line }"
-          room.send lines.join '\n'
+          text = lines.join('\n')
+          if text is ''
+            @_log 'warning', "not sending an empty message in room #{ room.uri }"
+          else
+            room.send text, (err) =>
+              @_log 'error', "error sending message to room #{ room.uri }: #{ text }"
         )
 
 
