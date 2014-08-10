@@ -179,6 +179,7 @@ class GitterAdapter extends Adapter
       @_log "registered new room #{ room.uri }"
       @_knownRooms[id] = r = room
       events = r.listen()
+      events.wildcard = yes
       events.emit = ((original) =>
         (event, args...) =>
           @_log "will emit #{ event } on #{ room.uri } with [#{ args.join ', ' }]"
