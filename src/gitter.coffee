@@ -54,7 +54,7 @@ class GitterAdapter extends Adapter
                 still = " (#{ lines.length + 1 } of #{ total } line(s) not sent)"
                 @_log 'error', "error sending a message to room #{ room.uri }#{ still }: #{ err }"
               else if (line = lines.shift())
-                room.send(line).then(next).fail(next)
+                room.send(line).then(-> next()).fail(next)
               else
                 @_log "message of #{ total } line(s) sent to room #{ room.uri }"
               # be sure to not return nothing
