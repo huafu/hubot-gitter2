@@ -89,8 +89,11 @@ class GitterAdapter extends Adapter
       @_log 'error', err = 'you must define HUBOT_GITTER_TOKEN to use Gitter adapter'
       throw new Error(err)
     @gitter = new Gitter(token)
+    @_log "rooms to join: #{ rooms }"
     for uri in rooms.split(/\s*,\s*/g) when uri isnt ''
-      @_resolveRoom uri, yes, (err, room) -> @_log 'error', "unable to join room #{ uri }" if err
+      @_resolveRoom(uri, yes, (err, room) ->
+        @_log 'error', "unable to join room #{ uri }" if err
+      )
     @emit 'connected'
 
 
@@ -106,6 +109,7 @@ class GitterAdapter extends Adapter
   # join      - Defines whether to join or not the room. Default: false
   # callback  - The method to call when the room is found or if error
   _resolveRoom: (uriOrRoom, join, callback) ->
+    @_log "_resolveRoom(#{ Array::join.call arguments, ', ' })"
     if arguments.length < 3
       callback = join
       join = no
@@ -149,6 +153,7 @@ class GitterAdapter extends Adapter
   # uri      - The URI of the room to join
   # callback - The closure to call once joined or in error
   _joinRoom: (uri, callback) ->
+    @_log "_joinRoom(#{ Array::join.call arguments, ', ' })"
     throw new Error("Invalid room URI: #{ uri }") unless uri and (typeof(uri) is 'string' or uri instanceof String)
     @gitter.rooms.join(uri, (err, room) =>
       if err
@@ -165,6 +170,7 @@ class GitterAdapter extends Adapter
   # room   - The room object to register or update
   # joined - Whether to register the room as joined/left
   _registerRoom: (room, joined) ->
+    @_log "_registerRoom(#{ room.uri })"
     throw new Error("invalid room") unless room?.id and room?.uri
     id = "#{room.id}"
     if (r = @_knownRooms[id])
@@ -183,6 +189,7 @@ class GitterAdapter extends Adapter
   # property - The property to look for. Default: 'id'
   # value    - The searched value for that property
   _findRoomBy: (property, value) ->
+    @_log "_findRoomBy(#{ Array::join.call arguments, ', ' })"
     if arguments.length is 1
       value = property
       property = 'id'
@@ -201,6 +208,7 @@ class GitterAdapter extends Adapter
   # room   - The room object
   # joined - If set, will flag the room as joined or not
   _hasJoinedRoom: (room, joined) ->
+    @_log "_hasJoinedRoom(#{ Array::join.call arguments, ', ' })"
     if arguments.length is 2
       if Boolean(joined) isnt Boolean(room._joined)
         # we need to start/stop listening to new messages on that room
@@ -214,6 +222,7 @@ class GitterAdapter extends Adapter
   # room  - The room which received the event
   # event - The event
   _handleRoomEvent: (room, event) ->
+    @_log "_handleRoomEvent(#{ Array::join.call arguments, ', ' })"
     console.log 'ROOM EVENT', room, event
 
 
@@ -225,7 +234,7 @@ class GitterAdapter extends Adapter
     if arguments.length is 1
       message = level
       level = 'debug'
-    @robot.logger[level] message
+    @robot.logger[level] "[GITTER2] #{ message }"
 
 
 exports.use = (robot) -> new GitterAdapter(robot)
