@@ -269,9 +269,8 @@ class GitterAdapter extends Adapter
         # we need to have the bot's user
         @_resolveHubotSelfUser((err, bot) =>
           return @_log 'error', "unable to find hubot user: #{ err }" if err
-          console.log "SENDER, ME", sender, bot
           # handle the message only if it is not from the bot itself
-          unless sender.id is bot.id
+          if "#{sender.id}" isnt "#{bot.id}"
             sender.room = room.id
             msg = new TextMessage sender, message.text, message.id
             message.private = room.oneToOne
@@ -280,6 +279,8 @@ class GitterAdapter extends Adapter
             catch err
               @_log 'error', txt = "error handling message #{ msg.id }"
               console.log txt, msg
+          else
+            @_log "not handling bot own message #{ message.id }"
         )
 
       else
