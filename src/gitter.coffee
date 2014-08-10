@@ -1,7 +1,10 @@
 {EventEmitter}        = require 'events'
+util                  = require 'util'
 Gitter                = require 'node-gitter'
 {Adapter,TextMessage} = require 'hubot'
 
+
+ROOM_EVENTS = ['message']
 
 class GitterAdapter extends Adapter
   # An adapter is a specific interface to a chat source for robots.
@@ -179,7 +182,6 @@ class GitterAdapter extends Adapter
       @_log "registered new room #{ room.uri }"
       @_knownRooms[id] = r = room
       events = r.listen()
-      events.wildcard = yes
       events.emit = ((original) =>
         (event, args...) =>
           @_log "will emit #{ event } on #{ room.uri } with [#{ args.join ', ' }]"
@@ -219,7 +221,9 @@ class GitterAdapter extends Adapter
     if arguments.length is 2
       if Boolean(joined) isnt Boolean(room._joined)
         # we need to start/stop listening to new messages on that room
-        room.events[if joined then 'on' else 'off'] '*', @_handleRoomEvent.bind(@, room)
+        method = room.events[if joined then 'on' else 'off'].bind room.events
+        for event in ROOM_EVENTS
+          method event, @_handleRoomEvent.bind(@, room)
         @_log "#{ if joined then 'started' else 'stopped' } listening events from #{ room.uri }"
       room._joined = Boolean joined
     Boolean room._joined
@@ -230,8 +234,8 @@ class GitterAdapter extends Adapter
   # room  - The room which received the event
   # event - The event
   _handleRoomEvent: (room, event) ->
-    @_log "_handleRoomEvent(#{ Array::join.call arguments, ', ' })"
-    console.log 'ROOM EVENT', room, event
+    @_log "_handleRoomEvent(#{ Array::join.call(arguments, ', ') })"
+    console.log 'ROOM EVENT', arguments...
 
 
   # Private: log a message (debug by default)
