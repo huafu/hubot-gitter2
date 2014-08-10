@@ -47,12 +47,14 @@ class GitterAdapter extends Adapter
           else
             @_log "sending a message to the room #{ room.uri }"
             room.send(text)
+            ### sounds like there is no CB possible yet so we just send the message
             .then(=>
               @_log "message sent"
             )
             .fail((err) =>
               @_log 'error', "error sending message to room #{ room.uri }: #{ err }"
             )
+            ###
         )
     return
 
