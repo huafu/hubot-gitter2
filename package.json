@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/huafu/hubot-gitter2",
   "dependencies": {
-    "node-gitter": "^1.2.1"
+    "node-gitter": "huafu/node-gitter"
   }
 }
