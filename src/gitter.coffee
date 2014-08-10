@@ -5,6 +5,7 @@ Gitter                = require 'node-gitter'
 
 
 ROOM_EVENTS = ['message']
+ROOM_ID_REGEXP = /^[a-f0-9]{24}$/
 
 class GitterAdapter extends Adapter
   # An adapter is a specific interface to a chat source for robots.
@@ -118,16 +119,21 @@ class GitterAdapter extends Adapter
       callback = join
       join = no
     if typeof(uriOrRoom) is 'string' or uriOrRoom instanceof String
-      # an URI has been given
-      uri = uriOrRoom
-      if (room = @_findRoomBy 'uri', uri) and (not join or @_hasJoinedRoom room)
-        # we know the room and we joined it already
-        callback null, room
+      if ROOM_ID_REGEXP.test(uriOrRoom)
+        # it is a room ID
+        uriOrRoom = id: uriOrRoom
       else
-        # we didn't join the room yet
-        @_joinRoom uri, callback
+        # an URI has been given
+        uri = uriOrRoom
+        if (room = @_findRoomBy 'uri', uri) and (not join or @_hasJoinedRoom room)
+          # we know the room and we joined it already
+          callback null, room
+        else
+          # we didn't join the room yet
+          @_joinRoom uri, callback
+        return
 
-    else if (id = uriOrRoom?.id)
+    if (id = uriOrRoom?.id)
       # we got a room object
       # this closure will join if needed and finally call our cb
       end = ((room) =>
