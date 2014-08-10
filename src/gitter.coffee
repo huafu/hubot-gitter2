@@ -107,8 +107,8 @@ class GitterAdapter extends Adapter
         # registering known users
         room.users()
         .then((users) =>
-          @_resolveHubotUser(user) for user in users
-          return
+          for user in users
+            @_resolveHubotUser(user)
         )
         .fail((err) =>
           @_log 'error', "error trying to get the list of users in room #{ room.uri }: #{ err }"
@@ -308,7 +308,7 @@ class GitterAdapter extends Adapter
     props =
       id: userData.id
       login: userData.username
-      name: userData.displayName
+      name: if userData.displayName and userData.username then "#{ userData.displayName } (#{userData.username})" else null
       avatarUrl: userData.avatarUrlMedium
       url: userData.url
     # be sure to create the user if it does not exists
