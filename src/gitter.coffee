@@ -33,24 +33,34 @@ class GitterAdapter extends Adapter
         # find the room, and send the message to it
         @_resolveRoom(envelope.room, yes, (err, room) =>
           return @_log 'error', "unable to find/join room #{ envelope.room }: #{ err }" if err
+          # make sure not line is empty
           lines = []
           for line in strings
-            if line is undefined or line is null
-              lines.push ''
+            if line is undefined or line is null or line is ''
+              lines.push ' '
             else
               lines.push "#{ line }"
-          text = lines.join('\n')
-          if text is ''
+          # now we can send all lines
+          if lines.length < 1
+            # make sure we are not sending an empty message
             @_log 'warning', "not sending an empty message in room #{ room.uri }"
           else
-            @_log "sending a message to the room #{ room.uri }"
-            room.send(text)
-            .then(=>
-              @_log "message sent"
+            # send all lines, one by one
+            total = lines.length
+            @_log "sending #{ total } messages to the room #{ room.uri }"
+            # this closure is responsible of sending one line and handling possible error of previous line
+            next = ((err) =>
+              if err
+                still = " (#{ lines.length + 1 } of #{ total } line(s) not sent)"
+                @_log 'error', "error sending a message to room #{ room.uri }#{ still }: #{ err }"
+              else if (line = lines.shift())
+                room.send(line).then(next).fail(next)
+              else
+                @_log "message of #{ total } line(s) sent to room #{ room.uri }"
+              # be sure to not return nothing
+              return
             )
-            .fail((err) =>
-              @_log 'error', "error sending message to room #{ room.uri }: #{ err }"
-            )
+            next()
         )
     return
 
