@@ -8,6 +8,8 @@ hubot-gitter2
 There was already one adapter [hubot-gitter](https://github.com/kcjpop/hubot-gitter) but after trying
 to fix many missing things from it, I decided to write one from scratch.
 
+[![Gitter chat](https://badges.gitter.im/huafu/hubot-gitter2.png)](https://gitter.im/huafu/hubot-gitter2)
+
 At the time this is written, here is the advantages of this one:
 
 - namespaced environment variables for the configuration
@@ -24,4 +26,3 @@ At the time this is written, here is the advantages of this one:
 - start the bot using the right adapter: `HUBOT_GITTER_TOKEN=<your token> HUBOT_GITTER_ROOMS=<room URIs> ./bin/hubot -a gitter2`
     - `HUBOT_GITTER_TOKEN`: get your personal token [there](http://developer.gitter.im) after sign-in
     - `HUBOT_GITTER_ROOMS`: the rooms you want the bot to join (can be an org.: `my-org`, a repo: `user/repo` or a channel: `my-org/channel`)
-

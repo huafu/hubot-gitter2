@@ -54,6 +54,7 @@ class GitterAdapter extends Adapter
               @_log 'error', "error sending message to room #{ room.uri }: #{ err }"
             )
         )
+    return
 
 
   # Public: Raw method for sending emote data back to the chat source.
@@ -81,6 +82,7 @@ class GitterAdapter extends Adapter
     else
       @_log 'error', "failed to reply to #{ envelope }"
       console.log "failed to reply to", envelope
+    return
 
 
   # Public: Raw method for setting a topic on the chat source. Extend this.
