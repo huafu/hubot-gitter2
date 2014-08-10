@@ -14,7 +14,6 @@ class GitterAdapter extends Adapter
   constructor: (@robot) ->
     super
     @_knownRooms = {}
-    @_knownUsers = {}
 
 
   # Public: Raw method for sending data back to the chat source. Extend this.
@@ -107,8 +106,13 @@ class GitterAdapter extends Adapter
         return @_log 'error', "unable to join room #{ uri }" if err
         # registering known users
         room.users()
-        .then((users) -> console.log 'USERS', users)
-        .fail((err) -> console.log 'USERS FAIL', err)
+        .then((users) =>
+          @_resolveHubotUser(user) for user in users
+          return
+        )
+        .fail((err) =>
+          @_log 'error', "error trying to get the list of users in room #{ room.uri }: #{ err }"
+        )
       )
     # we are connected, ready to start
     @emit 'connected'
@@ -301,9 +305,17 @@ class GitterAdapter extends Adapter
   _resolveHubotUser: (userData) ->
     throw new Error("Invalid user data given #{ userData }") unless userData?.id
     userId = "#{userData.id}"
-    res = @robot.brain.userForId userId, userData
-    @robot.brain.data.users[userId].name = userData.displayName if userData.displayName
-    res
+    props =
+      id: userData.id
+      login: userData.username
+      name: userData.displayName
+      avatarUrl: userData.avatarUrlMedium
+      url: userData.url
+    # be sure to create the user if it does not exists
+    @robot.brain.userForId userId, props
+    for k, v of props when k isnt 'id' and v isnt null and v isnt undefined
+      @robot.brain.data.users[userId][k] = v
+    @robot.brain.userForId userId
 
 
   # Private: Get the robot user object
