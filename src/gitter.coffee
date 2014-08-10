@@ -46,8 +46,13 @@ class GitterAdapter extends Adapter
             @_log 'error', "found the room, but it has no method `send`: #{ room.send }"
           else
             @_log "sending a message to the room #{ room.uri }"
-            room.send text, (err) =>
-              @_log 'error', "error sending message to room #{ room.uri }: #{ err }" if err
+            room.send(text)
+            .then(=>
+              @_log "message sent"
+            )
+            .fail((err) =>
+              @_log 'error', "error sending message to room #{ room.uri }: #{ err }"
+            )
         )
 
 
