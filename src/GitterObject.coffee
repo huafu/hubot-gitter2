@@ -49,9 +49,9 @@ class GitterObject extends EventEmitter2
         unless res[key] is val
           res[key] = val
           updated.push key
-      if updated.length and (cl = @client()) instanceof require('./GitterClient')
+      if updated.length
         setTimeout (=>
-          cl.emit "#{ cn }:update", res
+          cl.emit "#{ cn }.update", res, updated if (cl = @client()) instanceof require('./GitterClient')
           res.emit 'update', updated
         ), 1
     else
@@ -101,10 +101,10 @@ class GitterObject extends EventEmitter2
     @_promises = {}
     self = @
     @on '*', ->
-      self.log "{event}{#{ @event }} #{ GitterObject.inspectArgs arguments }"
+      self.log "{event::#{ @event }} #{ GitterObject.inspectArgs arguments }"
       return
     # be sure this will run async, after any other constructor code
-    setTimeout (=> cl.emit "#{ @className() }:new", @), 1 if (cl = @client()) instanceof require('./GitterClient')
+    setTimeout (=> cl.emit "#{ @className() }.create", @), 1 if (cl = @client()) instanceof require('./GitterClient')
     @log "created"
 
   # Get the ID of that object
