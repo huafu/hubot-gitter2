@@ -1,5 +1,5 @@
 GitterObject = require './GitterObject'
-GitterRoom = require './GitterRoom'
+GitterRoom   = -> require './GitterRoom'
 
 # Handle a Gitter user
 class GitterUser extends GitterObject
@@ -43,6 +43,7 @@ class GitterUser extends GitterObject
   #
   # @param {Function} callback The method to call once the room list is there
   asyncRooms: (callback = ->) ->
+    @_ensureClientReady()
     @_promise("rooms.all", => @_data.rooms())
     .then (rooms) =>
       @log "loaded #{ rooms.length } rooms which user is a member of"
@@ -51,7 +52,7 @@ class GitterUser extends GitterObject
       ccl = cl.client()
       flag = @isSessionUser()
       for r in rooms
-        room = GitterRoom.factory cl, ccl.rooms.extend(r)
+        room = GitterRoom().factory cl, ccl.rooms.extend(r)
         room._flagJoined yes if flag
         parsedRooms.push room
       callback null, parsedRooms

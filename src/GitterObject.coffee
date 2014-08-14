@@ -1,10 +1,21 @@
 EventEmitter2 = require('eventemitter2').EventEmitter2
+GitterClient  = -> require './GitterClient'
 
 # Base class for all Gitter objects
 #
 # @abstract
 class GitterObject extends EventEmitter2
 
+  # @property {String} The default method name to use on the logger if the specified level is not a method
+  @LOGGER_FALLBACK_METHOD_NAME: 'log'
+
+  # @property {Object} The logger to be used, default to the `console`
+  @_logger = console
+
+  # Inspect given array of arguments
+  #
+  # @param {Array} args The array of arguments to inspect
+  # @return {String} The inspected arguments
   @inspectArgs: (args) ->
     res = []
     for arg in args
@@ -25,9 +36,9 @@ class GitterObject extends EventEmitter2
   # @param {String} message The message to log
   # @param {String} context Some optional context
   @log: (level, message, context = "[#{ @className() }]") ->
-    message = "[node-gitter2.#{ level }]#{ context } #{ message }"
-    level = 'log' unless console[level]
-    console[level] message
+    message = "[hubot-gitter2.#{ level }]#{ context } #{ message }"
+    level = @LOGGER_FALLBACK_METHOD_NAME unless @_logger[level]
+    @_logger[level] message
 
   # @property {Object<Object<GitterObject>>} Holds all known GitterObject and derived, indexed
   @_instances: {}
@@ -51,7 +62,7 @@ class GitterObject extends EventEmitter2
           updated.push key
       if updated.length
         setTimeout (=>
-          cl.emit "#{ cn }.update", res, updated if (cl = @client()) instanceof require('./GitterClient')
+          cl.emit "#{ cn }.update", res, updated if (cl = @client()) instanceof GitterClient()
           res.emit 'update', updated
         ), 1
     else
@@ -104,7 +115,7 @@ class GitterObject extends EventEmitter2
       self.log "{event::#{ @event }} #{ GitterObject.inspectArgs arguments }"
       return
     # be sure this will run async, after any other constructor code
-    setTimeout (=> cl.emit "#{ @className() }.create", @), 1 if (cl = @client()) instanceof require('./GitterClient')
+    setTimeout (=> cl.emit "#{ @className() }.create", @), 1 if (cl = @client()) instanceof GitterClient()
     @log "created"
 
   # Get the ID of that object
@@ -164,6 +175,14 @@ class GitterObject extends EventEmitter2
           return
       ), 1
     p
+
+  # Ensure client is ready
+  _ensureClientReady: ->
+    if @ instanceof GitterClient()
+      cl = @
+    else
+      cl = @client()
+    throw new Error("client #{ cl } is not ready yet") unless cl.isReady()
 
 
 

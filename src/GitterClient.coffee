@@ -1,12 +1,18 @@
 Gitter       = require 'node-gitter'
 GitterObject = require './GitterObject'
-GitterRoom   = require './GitterRoom'
-GitterUser   = require './GitterUser'
+GitterRoom   = -> require './GitterRoom'
+GitterUser   = -> require './GitterUser'
 
 class GitterClient extends GitterObject
 
   # @property {GitterUser} The logged in user
   _sessionUser: null
+
+  # @property {Boolean} Whether the client is ready or not
+  _isReady: null
+
+  # @property {Boolean} Whether we are loading the session user to get ready
+  _isGettingReady: null
 
   # Create a new instance of a client or grab the existing one thanks to the token
   #
@@ -22,6 +28,9 @@ class GitterClient extends GitterObject
   # @param {null} dummy Not used
   # @param {Object} data The client's data
   constructor: ->
+    @_isReady = no
+    @_isGettingReady = no
+    start = new Date()
     super
     @_client = new Gitter(@token())
     for k, v of @_client.client when typeof(v) is "function"
@@ -31,7 +40,22 @@ class GitterClient extends GitterObject
           @log "{client##{ name }} [#{ Array::join.call arguments, ', ' }]"
           original.apply @_client.client, arguments
       )(k, v)
-      @asyncSessionUser()
+    @_isGettingReady = yes
+    @_asyncSessionUser (err) =>
+      if err
+        @log 'error', err
+      else
+        ms = Date.now() - start
+        @log 'info', "client ready in #{ Math.round(ms * 1000) / 1000 } milliseconds"
+        @_isReady = yes
+        @emit 'ready', ms
+
+  # Get the session's user
+  #
+  # @return {GitterUser} The session user
+  sessionUser: ->
+    @_ensureClientReady()
+    @_sessionUser
 
   # Get the client's token
   #
@@ -39,14 +63,21 @@ class GitterClient extends GitterObject
   token: ->
     @_data.token
 
+  # Finds whether the client is ready or not
+  #
+  # @return {Boolean} Returns true if the client is ready, else false
+  isReady: ->
+    @_isReady
+
   # Join a room using its URI
   #
   # @param {String} uri The room to join
   # @param {Function} callback The method to call once the room has been joined
   asyncJoinRoom: (uri, callback = ->) ->
+    @_ensureClientReady()
     @_promise("rooms.join:#{ uri }", => @client().rooms.join uri)
     .then (r) =>
-      room = GitterRoom.factory @, r
+      room = GitterRoom().factory @, r
       room._flagJoined yes
       @log 'info', "successfully joined room #{ room }"
       callback null, room
@@ -63,6 +94,7 @@ class GitterClient extends GitterObject
   # @option options {String} uri The room's URI
   # @param {Function} callback The method to call once the room has been found
   asyncRoom: (options, callback = ->) ->
+    @_ensureClientReady()
     if options.id
       prop = 'id'
     else if options.uri
@@ -70,33 +102,68 @@ class GitterClient extends GitterObject
     else
       throw new ReferenceError("neither `id` nor `uri` property exists on the given options `#{ options }`")
     val = options[prop]
-    if (room = GitterObject.findBy @, GitterRoom, prop, val)
+    if (room = GitterObject.findBy @, GitterRoom(), prop, val)
       @log "found room with #{ prop } `#{ val }`: #{ room }"
       callback null, room
     else if prop is 'id'
       @_promise("rooms.find:#{ prop }:#{ val }", => @client().rooms.find(val))
       .then (r) =>
-        room = GitterRoom.factory(@, r)
+        room = GitterRoom().factory(@, r)
         @log "loaded room with #{ prop } `#{ val }`: #{ room }"
         callback null, room
         return
       .fail (error) =>
         @log 'error', "unable to find room with #{ prop } `#{ val }`: #{ error }"
+        callback error
         return
     else
       @asyncJoinRoom val, callback
+
+  # Search a user using the first found property in options, in this order: `id`, `login`
+  # If the user login is given and the user isn't known yet, it'll fail finding the user
+  #
+  # @option options {String} id The user's id
+  # @option options {String} login The user's login
+  # @param {Function} callback The method to call once the user has been found
+  asyncUser: (options, callback = ->) ->
+    @_ensureClientReady()
+    if options.id
+      prop = 'id'
+    else if options.login
+      prop = 'login'
+    else
+      throw new ReferenceError("neither `id` nor `login` property exists on the given options `#{ options }`")
+    val = options[prop]
+    if (user = GitterObject.findBy @, GitterUser(), prop, val)
+      @log "found user with #{ prop } `#{ val }`: #{ user }"
+      callback null, user
+    else if prop is 'id'
+      @_promise("users.find:#{ prop }:#{ val }", => @client().users.find(val))
+      .then (u) =>
+        user = GitterUser().factory(@, u)
+        @log "loaded user with #{ prop } `#{ val }`: #{ user }"
+        callback null, user
+        return
+      .fail (error) =>
+        @log 'error', "unable to find user with #{ prop } `#{ val }`: #{ error }"
+        callback error
+        return
+    else
+      @log 'error', msg = "the user with #{ prop } `#{ val }` is unknown"
+      callback new Error(msg)
 
   # Load all known rooms
   #
   # @param {Function} callback The function to call when loaded
   asyncRooms: (callback = ->) ->
+    @_ensureClientReady()
     @_promise("rooms.all", => @client().rooms.findAll())
     .then (rooms) =>
       @log "loaded #{ rooms.length } rooms"
       parsedRooms = []
       cl = @client()
       for r in rooms
-        room = GitterRoom.factory @, cl.rooms.extend(r)
+        room = GitterRoom().factory @, cl.rooms.extend(r)
         room._flagJoined yes
         parsedRooms.push room
       callback null, parsedRooms
@@ -109,13 +176,17 @@ class GitterClient extends GitterObject
   # Loads the session user (logged-in user)
   #
   # @param {Function} callback The function to call when loaded
-  asyncSessionUser: (callback = ->) ->
+  _asyncSessionUser: (callback = ->) ->
+    if @_isGettingReady
+      @_isGettingReady = no
+    else
+      @_ensureClientReady()
     if @_sessionUser
       callback null, @_sessionUser
     else
       @_promise("users.current", => @client().currentUser())
       .then (user) =>
-        @_sessionUser = GitterUser.factory(@, user)
+        @_sessionUser = GitterUser().factory(@, user)
         @log 'info', "loaded session user: #{ @_sessionUser }"
         callback null, @_sessionUser
         return

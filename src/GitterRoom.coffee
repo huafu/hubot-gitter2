@@ -1,7 +1,5 @@
-
-
 GitterObject = require './GitterObject'
-GitterUser = require './GitterUser'
+GitterUser   = -> require './GitterUser'
 
 # Gitter Room manipulations
 class GitterRoom extends GitterObject
@@ -25,6 +23,12 @@ class GitterRoom extends GitterObject
   # @return {Boolean} Whether we joined the room or not
   hasJoined: ->
     @_hasJoined
+
+  # Whether the room is a one-to-one room
+  #
+  # @return {Boolean} Returns true if the room is a one-to-one, else false
+  isOneToOne: ->
+    Boolean(@_data.oneToOne)
 
   # Finds whether we are listening for events on the room's resource
   # Can be used to start/stop listening for events on that room too
@@ -65,6 +69,7 @@ class GitterRoom extends GitterObject
   #
   # @param {Function} callback The method to call once all users have ben loaded
   asyncUsers: (callback = ->) ->
+    @_ensureClientReady()
     @_promise("users.all", => @_data.users())
     .then (users) =>
       @log "loaded #{ users.length } member users"
@@ -72,7 +77,7 @@ class GitterRoom extends GitterObject
       cl = @client()
       ccl = cl.client()
       for user in users
-        u = GitterUser.factory cl, ccl.users.extend(user)
+        u = GitterUser().factory cl, ccl.users.extend(user)
         parsedUsers.push u
       callback null, parsedUsers
       return
@@ -85,22 +90,20 @@ class GitterRoom extends GitterObject
   #
   # @param {Function} callback Method to call when left
   asyncLeave: (callback = ->) ->
+    @_ensureClientReady()
     if @hasJoined()
       cl = @client()
-      cl.asyncSessionUser (error, user) =>
-        if error
-          callback error
-        else
-          @_promise("leave:#{ user }", => cl.client().removeUser user.id(), @id())
-          .then =>
-            @log "successfully left room #{ @ }"
-            @_flagJoined no
-            callback null, yes
-            return
-          .fail (error) =>
-            @log "error while leaving room #{ @ }: #{ error }"
-            callback error
-            return
+      user = cl.sessionUser()
+      @_promise("leave:#{ user }", => cl.client().removeUser user.id(), @id())
+      .then =>
+        @log "successfully left room #{ @ }"
+        @_flagJoined no
+        callback null, yes
+        return
+      .fail (error) =>
+        @log "error while leaving room #{ @ }: #{ error }"
+        callback error
+        return
     else
       callback null, yes
 
@@ -108,6 +111,7 @@ class GitterRoom extends GitterObject
   #
   # @param {Function} callback Method to call when joined
   asyncJoin: (callback = ->) ->
+    @_ensureClientReady()
     if @hasJoined()
       callback null, yes
     else
@@ -118,6 +122,7 @@ class GitterRoom extends GitterObject
   # @param {Array<String>, String} lines All the lines to send
   # @param {Function} callback Method to call when done
   asyncSend: (lines..., callback = ->) ->
+    @_ensureClientReady()
     if typeof(callback) isnt 'function'
       lines.push callback
       callback = ->
