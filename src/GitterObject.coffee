@@ -57,12 +57,12 @@ class GitterObject extends EventEmitter2
     if (res = @_instances[clk][cn][data.id])
       updated = []
       for own key, val of data when typeof(val) in ['string', 'number'] or val.constructor is Date
-        unless res[key] is val
-          res[key] = val
+        unless res._data[key] is val
+          res._data[key] = val
           updated.push key
       if updated.length
         setTimeout (=>
-          cl.emit "#{ cn }.update", res, updated if (cl = @client()) instanceof GitterClient()
+          cl.emit "#{ cn }.update", res, updated if (cl = res.client()) instanceof GitterClient()
           res.emit 'update', updated
         ), 1
     else
