@@ -32,6 +32,13 @@ class GitterUser extends GitterObject
     else
       @_data.url
 
+  # Finds whether the user is the known session user
+  #
+  # @param {}
+  # @return {Boolean} Returns true if this user is the one of the session, else false
+  isSessionUser: ->
+    (@client()._sessionUser is @)
+
   # Load rooms in which the user is
   #
   # @param {Function} callback The method to call once the room list is there
@@ -42,9 +49,10 @@ class GitterUser extends GitterObject
       parsedRooms = []
       cl = @client()
       ccl = cl.client()
+      flag = @isSessionUser()
       for r in rooms
         room = GitterRoom.factory cl, ccl.rooms.extend(r)
-        room._flagJoined yes
+        room._flagJoined yes if flag
         parsedRooms.push room
       callback null, parsedRooms
       return
