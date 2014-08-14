@@ -159,7 +159,6 @@ class HubotGitter2Adapter extends Adapter
   # @param {GitterRoom} room The room where the event triggered
   # @param {Object} event The event object, with `operation` and `model`, last one being the message itself
   _handleChatMessage: (eventName, room, data) ->
-    room.log "{{HANDLE CHAT MESSAGE}#{ if data?.operation then '{' + data.operation + '}' else '' }} #{ GitterObject.inspectArgs arguments }"
     if eventName is 'chatMessages.chatMessages' and data.operation is 'create'
       message = data.model
       cl = @gitterClient()
