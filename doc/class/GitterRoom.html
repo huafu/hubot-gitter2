@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../extra/README.md.html' title='Hubot-gitter2'>
+      Hubot-gitter2
+    </a>
+    &raquo;
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>GitterRoom</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        GitterRoom
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>src&#47;GitterRoom.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            <a href='../class/GitterObject.html'>GitterObject</a>
+          </td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>Gitter Room manipulations</p>
+</div>
+<div class='tags'>
+</div>
+      <h2>Property Summary</h2>
+      <dl class='properties'>
+        <dt id='_hasJoined-property'>
+          <span class='signature'>
+            (Boolean)
+            <b>
+              _hasJoined
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          Whether the session user joined that room or not 
+        </dd>
+      </dl>
+      <h3 class='inherited'>
+        Properties inherited from
+        <a href='../class/GitterObject.html'>GitterObject</a>
+      </h3>
+      <p class='inherited'>
+        <a href='[object Object]'>_instances</a>
+        <a href='[object Object]'>_data</a>
+        <a href='[object Object]'>_client</a>
+        <a href='[object Object]'>_promises</a>
+      </p>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#hasJoined-dynamic'>
+        #
+(Boolean)
+<b>hasJoined</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Did we join the room yet? 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#isListening-dynamic'>
+        #
+(Boolean)
+<b>isListening</b><span>(listen)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Finds whether we are listening for events on the room&#39;s resource Can be used to start/stop listening for events on that room too
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#uri-dynamic'>
+        #
+(String)
+<b>uri</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Get the room&#39;s URI 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#asyncUsers-dynamic'>
+        #
+(void)
+<b>asyncUsers</b><span>(callback = function() {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Load all users of the room 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#asyncLeave-dynamic'>
+        #
+(void)
+<b>asyncLeave</b><span>(callback = function() {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Leave the room, if joined 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#asyncJoin-dynamic'>
+        #
+(void)
+<b>asyncJoin</b><span>(callback = function() {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Join the room if not yet joined 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#prettyIdentifier-dynamic'>
+        #
+(String)
+<b>prettyIdentifier</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Get a pretty identifier that can identify the object 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_flagJoined-dynamic'>
+        #
+(void)
+<b>_flagJoined</b><span>(joined)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Internally used to flag the room as joined or not 
+    </span>
+  </li>
+</ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='../class/GitterObject.html'>GitterObject</a>
+        </h3>
+        <p class='inherited'>
+          <a href='../class/GitterObject.html#inspectArgs-static'>.inspectArgs</a>
+          <a href='../class/GitterObject.html#log-static'>.log</a>
+          <a href='../class/GitterObject.html#factory-static'>.factory</a>
+          <a href='../class/GitterObject.html#className-static'>.className</a>
+          <a href='../class/GitterObject.html#findBy-static'>.findBy</a>
+          <a href='../class/GitterObject.html#id-dynamic'>#id</a>
+          <a href='../class/GitterObject.html#client-dynamic'>#client</a>
+          <a href='../class/GitterObject.html#prettyIdentifier-dynamic'>#prettyIdentifier</a>
+          <a href='../class/GitterObject.html#_promise-dynamic'>#_promise</a>
+        </p>
+      </h2>
+      <h2>Constructor Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='constructor-dynamic'>
+      #
+(void)
+<b>constructor</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Creates a new room and take care of loading its users</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>client</span>
+      <span class='type'>
+        (
+          <tt><a href='../class/GitterClient.html'>GitterClient</a></tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The client to be used </span>
+    </li>
+    <li>
+      <span class='name'>data</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The room&#39;s data </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='hasJoined-dynamic'>
+      #
+(Boolean)
+<b>hasJoined</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Did we join the room yet?</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Boolean</tt>
+      )
+      &mdash;
+      <span class='desc'>Whether we joined the room or not </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='isListening-dynamic'>
+      #
+(Boolean)
+<b>isListening</b><span>(listen)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Finds whether we are listening for events on the room&#39;s resource
+Can be used to start/stop listening for events on that room too</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>listen</span>
+      <span class='type'>
+        (
+          <tt>Boolean</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>If given, will start/stop listening depending on the value </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Boolean</tt>
+      )
+      &mdash;
+      <span class='desc'>Returns true if listening, else false </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='uri-dynamic'>
+      #
+(String)
+<b>uri</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Get the room&#39;s URI</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>String</tt>
+      )
+      &mdash;
+      <span class='desc'>The room&#39;s URI </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='asyncUsers-dynamic'>
+      #
+(void)
+<b>asyncUsers</b><span>(callback = function() {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Load all users of the room</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>Function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The method to call once all users have ben loaded </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='asyncLeave-dynamic'>
+      #
+(void)
+<b>asyncLeave</b><span>(callback = function() {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Leave the room, if joined</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>Function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Method to call when left </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='asyncJoin-dynamic'>
+      #
+(void)
+<b>asyncJoin</b><span>(callback = function() {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Join the room if not yet joined</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>Function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Method to call when joined </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='prettyIdentifier-dynamic'>
+      #
+(String)
+<b>prettyIdentifier</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Get a pretty identifier that can identify the object</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>String</tt>
+      )
+      &mdash;
+      <span class='desc'>A text identifying the object </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_flagJoined-dynamic'>
+      #
+(void)
+<b>_flagJoined</b><span>(joined)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Internally used to flag the room as joined or not</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>joined</span>
+      <span class='type'>
+        (
+          <tt>Boolean</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Whether it is known as joined or left </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  August 14, 14 13:24:34 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.9
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>
