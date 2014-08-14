@@ -31,6 +31,7 @@ class GitterClient extends GitterObject
           @log "{client##{ name }} [#{ Array::join.call arguments, ', ' }]"
           original.apply @_client.client, arguments
       )(k, v)
+      @asyncSessionUser()
 
   # Get the client's token
   #
