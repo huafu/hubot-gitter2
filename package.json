@@ -23,6 +23,6 @@
   "homepage": "https://github.com/huafu/hubot-gitter2",
   "dependencies": {
     "eventemitter2": "0.4.14",
-    "node-gitter": "huafu/node-gitter"
+    "node-gitter": "1.2.2"
   }
 }
