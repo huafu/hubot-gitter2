@@ -30,7 +30,7 @@ class HubotGitter2Adapter extends Adapter
   # @param {Array<String>} strings One or more Strings for each message to send.
   send: (envelope, strings...) ->
     @_resolveRoom(envelope.room, yes, (room) =>
-      room.send strings
+      room.asyncSend strings
     )
     return
 
