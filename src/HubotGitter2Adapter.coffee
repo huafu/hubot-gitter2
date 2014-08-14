@@ -113,9 +113,9 @@ class HubotGitter2Adapter extends Adapter
   # @return {GitterClient} The core client
   gitterClient: ->
     unless @_client
-      token = process.env.HUBOT_GITTER2_TOKEN or ''
+      token = process.env.HUBOT_GITTER2_TOKEN or process.env.HUBOT_GITTER_TOKEN or ''
       unless token
-        @_log 'error', err = 'you must define HUBOT_GITTER_TOKEN to use Gitter adapter'
+        @_log 'error', err = 'you must define HUBOT_GITTER2_TOKEN to use Gitter adapter'
         throw new Error(err)
       @_client = GitterClient.factory {token}
     @_client
