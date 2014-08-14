@@ -6,6 +6,9 @@ GitterUser = require './GitterUser'
 # Gitter Room manipulations
 class GitterRoom extends GitterObject
 
+  # @property {Number} The maximum message size
+  @MAX_MESSAGE_SIZE = 1024
+
   # @property {Boolean} Whether the session user joined that room or not
   _hasJoined: null
 
@@ -43,7 +46,7 @@ class GitterRoom extends GitterObject
           # then listen for events
           @log "listening events on resource `#{ resource }`"
           ((name, em) ->
-            em.on '*', -> self.emit "#{ name }:event", @event, arguments...
+            em.on '*', -> self.emit "#{ name }.#{ @event }", arguments...
           )(resource, emitter)
       else if @_data._fayeClient
         @log "stop listening events on all resources"
@@ -109,6 +112,70 @@ class GitterRoom extends GitterObject
       callback null, yes
     else
       @client().asyncJoinRoom @uri(), callback
+
+  # Send a message to that room as the connected user
+  #
+  # @param {Array<String>, String} lines All the lines to send
+  # @param {Function} callback Method to call when done
+  asyncSend: (lines..., callback = ->) ->
+    if typeof(callback) isnt 'function'
+      lines.push callback
+      callback = ->
+    if lines.length is 1 and typeof(lines[0]) is 'array' or lines[0] instanceof Array
+      lines = lines[0]
+    # make sure not line is empty
+    strings = lines.slice()
+    lines = []
+    for line in strings
+      if line is undefined or line is null or line is ''
+        lines.push ' '
+      else
+        lines.push "#{ line }"
+    # keep track of how many messages has been asked to send
+    realTotal = lines.length
+    # we need to join lines without going over the max message size
+    chunks = []
+    while lines.length
+      chunk = []
+      size = 0
+      while lines.length
+        # here we check if we have at least one line in the chunk else we'll loop infinitely
+        ls = lines[0].length + 1
+        break if chunk.length > 0 and size + ls >= GitterRoom.MAX_MESSAGE_SIZE
+        chunk.push lines.shift()
+        size += ls
+      # we create a new chunk with all possible lines that we could join
+      chunks.push chunk.join('\n')
+    # now we have optimized the # of messages
+    lines = chunks.slice()
+    if lines.length isnt realTotal
+      @log "compressed #{ realTotal } lines into #{ lines.length } chunk(s)"
+    # now we can send all lines
+    if lines.length < 1
+      # make sure we are not sending an empty message
+      @log 'warning', "not sending an empty message"
+      callback null, lines
+    else
+      # send all lines, one by one
+      total = lines.length
+      sent = []
+      @log "sending #{ total } message chunk(s)"
+      # this closure is responsible of sending one line and handling possible error of previous line
+      next = ((err, lineSent) =>
+        sent.push lineSent if lineSent?
+        if err
+          still = " (#{ lines.length + 1 } of #{ total } chunk(s) not sent)"
+          @log 'error', "error sending a message#{ still }: #{ err }"
+          callback err, sent
+        else if (line = lines.shift())
+          @_data.send(line).then(-> next(null, line)).fail(next)
+        else
+          @log "message of #{ total } chunk(s) sent"
+          callback null, sent
+        # be sure to not return nothing
+        return
+      )
+      next()
 
   # Get a pretty identifier that can identify the object
   #
