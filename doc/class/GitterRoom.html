@@ -64,6 +64,7 @@
         <a href='../class/GitterObject.html'>GitterObject</a>
       </h3>
       <p class='inherited'>
+        <a href='[object Object]'>LOGGER_FALLBACK_METHOD_NAME</a>
         <a href='[object Object]'>_instances</a>
         <a href='[object Object]'>_data</a>
         <a href='[object Object]'>_client</a>
@@ -81,6 +82,18 @@
     </span>
     <span class='desc'>
       Did we join the room yet? 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#isOneToOne-dynamic'>
+        #
+(Boolean)
+<b>isOneToOne</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Whether the room is a one-to-one room 
     </span>
   </li>
   <li>
@@ -146,6 +159,18 @@
   </li>
   <li>
     <span class='signature'>
+      <a href='#asyncSend-dynamic'>
+        #
+(void)
+<b>asyncSend</b><span>(lines..., callback = function() {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Send a message to that room as the connected user 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#prettyIdentifier-dynamic'>
         #
 (String)
@@ -185,6 +210,8 @@
           <a href='../class/GitterObject.html#client-dynamic'>#client</a>
           <a href='../class/GitterObject.html#prettyIdentifier-dynamic'>#prettyIdentifier</a>
           <a href='../class/GitterObject.html#_promise-dynamic'>#_promise</a>
+          <a href='../class/GitterObject.html#_ensureClientReady-dynamic'>#_ensureClientReady</a>
+          <a href='../class/GitterObject.html#_created-dynamic'>#_created</a>
         </p>
       </h2>
       <h2>Constructor Details</h2>
@@ -197,7 +224,7 @@
       <br>
     </p>
     <div class='docstring'>
-  <p>Creates a new room and take care of loading its users</p>
+  <p>Creates a new room</p>
 </div>
 <div class='tags'>
   <h3>Parameters:</h3>
@@ -248,6 +275,30 @@
       )
       &mdash;
       <span class='desc'>Whether we joined the room or not </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='isOneToOne-dynamic'>
+      #
+(Boolean)
+<b>isOneToOne</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Whether the room is a one-to-one room</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Boolean</tt>
+      )
+      &mdash;
+      <span class='desc'>Returns true if the room is a one-to-one, else false </span>
     </li>
   </ul>
 </div>
@@ -393,6 +444,42 @@ Can be used to start/stop listening for events on that room too</p>
 </div>
   </div>
   <div class='method_details'>
+    <p class='signature' id='asyncSend-dynamic'>
+      #
+(void)
+<b>asyncSend</b><span>(lines..., callback = function() {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Send a message to that room as the connected user</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>lines</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;String&gt;, String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>All the lines to send </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>Function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Method to call when done </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
     <p class='signature' id='prettyIdentifier-dynamic'>
       #
 (String)
@@ -445,7 +532,7 @@ Can be used to start/stop listening for events on that room too</p>
 </div>
     </div>
     <div id='footer'>
-  August 14, 14 13:24:34 by
+  August 15, 14 08:54:09 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

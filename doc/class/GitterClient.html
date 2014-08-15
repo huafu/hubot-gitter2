@@ -52,12 +52,35 @@
         <dd class='desc'>
           The logged in user 
         </dd>
+        <dt id='_isReady-property'>
+          <span class='signature'>
+            (Boolean)
+            <b>
+              _isReady
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          Whether the client is ready or not 
+        </dd>
+        <dt id='_isGettingReady-property'>
+          <span class='signature'>
+            (Boolean)
+            <b>
+              _isGettingReady
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          Whether we are loading the session user to get ready 
+        </dd>
       </dl>
       <h3 class='inherited'>
         Properties inherited from
         <a href='../class/GitterObject.html'>GitterObject</a>
       </h3>
       <p class='inherited'>
+        <a href='[object Object]'>LOGGER_FALLBACK_METHOD_NAME</a>
         <a href='[object Object]'>_instances</a>
         <a href='[object Object]'>_data</a>
         <a href='[object Object]'>_client</a>
@@ -82,6 +105,18 @@
       <ul class='summary'>
   <li>
     <span class='signature'>
+      <a href='#sessionUser-dynamic'>
+        #
+(GitterUser)
+<b>sessionUser</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Get the session&#39;s user 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#token-dynamic'>
         #
 (String)
@@ -90,6 +125,18 @@
     </span>
     <span class='desc'>
       Get the client&#39;s token 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#isReady-dynamic'>
+        #
+(Boolean)
+<b>isReady</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Finds whether the client is ready or not 
     </span>
   </li>
   <li>
@@ -119,6 +166,19 @@
   </li>
   <li>
     <span class='signature'>
+      <a href='#asyncUser-dynamic'>
+        #
+(void)
+<b>asyncUser</b><span>(options, callback = function() {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Search a user using the first found property in options, in this order: <code>id</code>, <code>login</code> If the user login is given and the user isn&#39;t known yet, it&#39;ll fail finding the user
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#asyncRooms-dynamic'>
         #
 (void)
@@ -131,10 +191,10 @@
   </li>
   <li>
     <span class='signature'>
-      <a href='#asyncSessionUser-dynamic'>
+      <a href='#_asyncSessionUser-dynamic'>
         #
 (void)
-<b>asyncSessionUser</b><span>(callback = function() {})</span>
+<b>_asyncSessionUser</b><span>(callback = function() {})</span>
       </a>
     </span>
     <span class='desc'>
@@ -158,6 +218,8 @@
           <a href='../class/GitterObject.html#client-dynamic'>#client</a>
           <a href='../class/GitterObject.html#prettyIdentifier-dynamic'>#prettyIdentifier</a>
           <a href='../class/GitterObject.html#_promise-dynamic'>#_promise</a>
+          <a href='../class/GitterObject.html#_ensureClientReady-dynamic'>#_ensureClientReady</a>
+          <a href='../class/GitterObject.html#_created-dynamic'>#_created</a>
         </p>
       </h2>
       <h2>Class Method Details</h2>
@@ -245,6 +307,30 @@
       <h2>Instance Method Details</h2>
       <div class='methods'>
   <div class='method_details'>
+    <p class='signature' id='sessionUser-dynamic'>
+      #
+(GitterUser)
+<b>sessionUser</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Get the session&#39;s user</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt><a href='../class/GitterUser.html'>GitterUser</a></tt>
+      )
+      &mdash;
+      <span class='desc'>The session user </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
     <p class='signature' id='token-dynamic'>
       #
 (String)
@@ -264,6 +350,30 @@
       )
       &mdash;
       <span class='desc'>The client&#39;s token </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='isReady-dynamic'>
+      #
+(Boolean)
+<b>isReady</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Finds whether the client is ready or not</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Boolean</tt>
+      )
+      &mdash;
+      <span class='desc'>Returns true if the client is ready, else false </span>
     </li>
   </ul>
 </div>
@@ -358,6 +468,59 @@ If the room URI is given and the room isn&#39;t known yet, it&#39;ll join the ro
 </div>
   </div>
   <div class='method_details'>
+    <p class='signature' id='asyncUser-dynamic'>
+      #
+(void)
+<b>asyncUser</b><span>(options, callback = function() {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Search a user using the first found property in options, in this order: <code>id</code>, <code>login</code>
+If the user login is given and the user isn&#39;t known yet, it&#39;ll fail finding the user</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>Function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The method to call once the user has been found </span>
+    </li>
+  </ul>
+  <h3>
+    Options Hash:
+    (options):
+  </h3>
+  <ul class='options'>
+    <li>
+      <span class='name'>id</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The user&#39;s id </span>
+    </li>
+    <li>
+      <span class='name'>login</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The user&#39;s login </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
     <p class='signature' id='asyncRooms-dynamic'>
       #
 (void)
@@ -384,10 +547,10 @@ If the room URI is given and the room isn&#39;t known yet, it&#39;ll join the ro
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='asyncSessionUser-dynamic'>
+    <p class='signature' id='_asyncSessionUser-dynamic'>
       #
 (void)
-<b>asyncSessionUser</b><span>(callback = function() {})</span>
+<b>_asyncSessionUser</b><span>(callback = function() {})</span>
       <br>
     </p>
     <div class='docstring'>
@@ -412,7 +575,7 @@ If the room URI is given and the room isn&#39;t known yet, it&#39;ll join the ro
 </div>
     </div>
     <div id='footer'>
-  August 14, 14 13:24:33 by
+  August 15, 14 08:54:09 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

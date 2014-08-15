@@ -62,6 +62,17 @@
       </p>
       <h2>Property Summary</h2>
       <dl class='properties'>
+        <dt id='LOGGER_FALLBACK_METHOD_NAME-property'>
+          <span class='signature'>
+            (String)
+            <b>
+              LOGGER_FALLBACK_METHOD_NAME
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          The default method name to use on the logger if the specified level is not a method 
+        </dd>
         <dt id='_instances-property'>
           <span class='signature'>
             (Object&lt;Object&lt;GitterObject&gt;&gt;)
@@ -113,11 +124,12 @@
     <span class='signature'>
       <a href='#inspectArgs-static'>
         .
-(void)
+(String)
 <b>inspectArgs</b><span>(args)</span>
       </a>
     </span>
     <span class='desc'>
+      Inspect given array of arguments 
     </span>
   </li>
   <li>
@@ -255,17 +267,69 @@
       Get the promise of something loading, creating it if it does not exists 
     </span>
   </li>
+  <li>
+    <span class='signature'>
+      <a href='#_ensureClientReady-dynamic'>
+        #
+(void)
+<b>_ensureClientReady</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Ensure client is ready 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_created-dynamic'>
+        #
+(void)
+<b>_created</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      To be called internally once the object has been created 
+    </span>
+  </li>
 </ul>
       <h2>Class Method Details</h2>
       <div class='methods'>
   <div class='method_details'>
     <p class='signature' id='inspectArgs-static'>
       .
-(void)
+(String)
 <b>inspectArgs</b><span>(args)</span>
       <br>
     </p>
-    
+    <div class='docstring'>
+  <p>Inspect given array of arguments</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>args</span>
+      <span class='type'>
+        (
+          <tt>Array</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The array of arguments to inspect </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>String</tt>
+      )
+      &mdash;
+      <span class='desc'>The inspected arguments </span>
+    </li>
+  </ul>
+</div>
   </div>
   <div class='method_details'>
     <p class='signature' id='log-static'>
@@ -702,10 +766,36 @@
   </ul>
 </div>
   </div>
+  <div class='method_details'>
+    <p class='signature' id='_ensureClientReady-dynamic'>
+      #
+(void)
+<b>_ensureClientReady</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Ensure client is ready</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_created-dynamic'>
+      #
+(void)
+<b>_created</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>To be called internally once the object has been created</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
 </div>
     </div>
     <div id='footer'>
-  August 14, 14 13:24:34 by
+  August 15, 14 08:54:09 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../extra/README.md.html' title='Hubot-gitter2'>
+      Hubot-gitter2
+    </a>
+    &raquo;
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>HubotGitter2Adapter</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        HubotGitter2Adapter
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>src&#47;HubotGitter2Adapter.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            <a href='../class/Adapter.html'>Adapter</a>
+          </td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>The hubot adapter for gitter</p>
+</div>
+<div class='tags'>
+</div>
+      <h2>Property Summary</h2>
+      <dl class='properties'>
+        <dt id='ROOM_ID_REGEXP-property'>
+          <span class='signature'>
+            (RegExp)
+            <b>
+              ROOM_ID_REGEXP
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          The regexp used to find if the given string is a valid room id 
+        </dd>
+        <dt id='_client-property'>
+          <span class='signature'>
+            (GitterClient)
+            <b>
+              _client
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          Our client 
+        </dd>
+      </dl>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#send-dynamic'>
+        #
+(void)
+<b>send</b><span>(envelope, strings...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for sending data back to the chat source. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#emote-dynamic'>
+        #
+(void)
+<b>emote</b><span>(envelope, strings...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for sending emote data back to the chat source. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#reply-dynamic'>
+        #
+(void)
+<b>reply</b><span>(envelope, strings...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for building a reply and sending it back to the chat source.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#topic-dynamic'>
+        #
+(void)
+<b>topic</b><span>(envelope, strings...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for setting a topic on the chat source. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#play-dynamic'>
+        #
+(void)
+<b>play</b><span>(envelope, strings...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for playing a sound in the chat source. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#run-dynamic'>
+        #
+(void)
+<b>run</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for invoking the bot to run. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#close-dynamic'>
+        #
+(void)
+<b>close</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Raw method for shutting the bot down. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#gitterClient-dynamic'>
+        #
+(GitterClient)
+<b>gitterClient</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Get our core client, creating it if necessary 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_resolveRoom-dynamic'>
+        #
+(void)
+<b>_resolveRoom</b><span>(uriOrRoom, join, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Resolve a Gitter room by URI or object, joining it if it is not joined yet 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_handleChatMessage-dynamic'>
+        #
+(void)
+<b>_handleChatMessage</b><span>(eventName, room, data)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Handles a room message event 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_log-dynamic'>
+        #
+(void)
+<b>_log</b><span>(level, message)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Log a message (debug by default) 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_hubotUser-dynamic'>
+        #
+(User)
+<b>_hubotUser</b><span>(user)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Get the hubot user for the given GitterUser 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_registerUser-dynamic'>
+        #
+(void)
+<b>_registerUser</b><span>(user)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Register a user in the robot&#39;s brain 
+    </span>
+  </li>
+</ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='../class/Adapter.html'>Adapter</a>
+        </h3>
+        <p class='inherited'>
+          <a href='../class/Adapter.html#send-dynamic'>#send</a>
+          <a href='../class/Adapter.html#emote-dynamic'>#emote</a>
+          <a href='../class/Adapter.html#reply-dynamic'>#reply</a>
+          <a href='../class/Adapter.html#topic-dynamic'>#topic</a>
+          <a href='../class/Adapter.html#play-dynamic'>#play</a>
+          <a href='../class/Adapter.html#run-dynamic'>#run</a>
+          <a href='../class/Adapter.html#close-dynamic'>#close</a>
+          <a href='../class/Adapter.html#receive-dynamic'>#receive</a>
+          <a href='../class/Adapter.html#users-dynamic'>#users</a>
+          <a href='../class/Adapter.html#userForId-dynamic'>#userForId</a>
+          <a href='../class/Adapter.html#userForName-dynamic'>#userForName</a>
+          <a href='../class/Adapter.html#usersForRawFuzzyName-dynamic'>#usersForRawFuzzyName</a>
+          <a href='../class/Adapter.html#usersForFuzzyName-dynamic'>#usersForFuzzyName</a>
+          <a href='../class/Adapter.html#http-dynamic'>#http</a>
+        </p>
+      </h2>
+      <h2>Constructor Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='constructor-dynamic'>
+      #
+(void)
+<b>constructor</b><span>(robot)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>An adapter is a specific interface to a chat source for robots.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>robot</span>
+      <span class='type'>
+        (
+          <tt><a href='../class/Robot.html'>Robot</a></tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A Robot instance. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='send-dynamic'>
+      #
+(void)
+<b>send</b><span>(envelope, strings...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for sending data back to the chat source. Extend this.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>envelope</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A Object with message, room and user details. </span>
+    </li>
+    <li>
+      <span class='name'>strings</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;String&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>One or more Strings for each message to send. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='emote-dynamic'>
+      #
+(void)
+<b>emote</b><span>(envelope, strings...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for sending emote data back to the chat source.
+Defaults as an alias for send</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>envelope</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A Object with message, room and user details. </span>
+    </li>
+    <li>
+      <span class='name'>strings</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;String&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>One or more Strings for each message to send. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='reply-dynamic'>
+      #
+(void)
+<b>reply</b><span>(envelope, strings...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for building a reply and sending it back to the chat
+source. Extend this.</p><p>Returns nothing.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>envelope</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A Object with message, room and user details. </span>
+    </li>
+    <li>
+      <span class='name'>strings</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;String&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>One or more Strings for each reply to send. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='topic-dynamic'>
+      #
+(void)
+<b>topic</b><span>(envelope, strings...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for setting a topic on the chat source. Extend this.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>envelope</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A Object with message, room and user details. </span>
+    </li>
+    <li>
+      <span class='name'>strings</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;String&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>One more more Strings to set as the topic. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='play-dynamic'>
+      #
+(void)
+<b>play</b><span>(envelope, strings...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for playing a sound in the chat source. Extend this.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>envelope</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A Object with message, room and user details. </span>
+    </li>
+    <li>
+      <span class='name'>strings</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;String&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>One or more strings for each play message to send. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='run-dynamic'>
+      #
+(void)
+<b>run</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for invoking the bot to run. Extend this.</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='close-dynamic'>
+      #
+(void)
+<b>close</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Raw method for shutting the bot down. Extend this.</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='gitterClient-dynamic'>
+      #
+(GitterClient)
+<b>gitterClient</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Get our core client, creating it if necessary</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt><a href='../class/GitterClient.html'>GitterClient</a></tt>
+      )
+      &mdash;
+      <span class='desc'>The core client </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_resolveRoom-dynamic'>
+      #
+(void)
+<b>_resolveRoom</b><span>(uriOrRoom, join, callback)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Resolve a Gitter room by URI or object, joining it if it is not joined yet</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>uriOrRoom</span>
+      <span class='type'>
+        (
+          <tt>String, Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The room description, or its URI, or its ID </span>
+    </li>
+    <li>
+      <span class='name'>join</span>
+      <span class='type'>
+        (
+          <tt>Boolean</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Defines whether to join or not the room. Default: false </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>Function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The method to call when the room is found </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_handleChatMessage-dynamic'>
+      #
+(void)
+<b>_handleChatMessage</b><span>(eventName, room, data)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Handles a room message event</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>room</span>
+      <span class='type'>
+        (
+          <tt><a href='../class/GitterRoom.html'>GitterRoom</a></tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The room where the event triggered </span>
+    </li>
+    <li>
+      <span class='name'>event</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The event object, with <code>operation</code> and <code>model</code>, last one being the message itself </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_log-dynamic'>
+      #
+(void)
+<b>_log</b><span>(level, message)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Log a message (debug by default)</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>level</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The level, default to debug </span>
+    </li>
+    <li>
+      <span class='name'>message</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The message to log </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_hubotUser-dynamic'>
+      #
+(User)
+<b>_hubotUser</b><span>(user)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Get the hubot user for the given GitterUser</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>user</span>
+      <span class='type'>
+        (
+          <tt><a href='../class/GitterUser.html'>GitterUser</a></tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The core GitterUser </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt><a href='../class/User.html'>User</a></tt>
+      )
+      &mdash;
+      <span class='desc'>The hubot user object </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_registerUser-dynamic'>
+      #
+(void)
+<b>_registerUser</b><span>(user)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Register a user in the robot&#39;s brain</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>user</span>
+      <span class='type'>
+        (
+          <tt><a href='../class/GitterUser.html'>GitterUser</a></tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The user to register </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  August 15, 14 08:54:09 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.9
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>
