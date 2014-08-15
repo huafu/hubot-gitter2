@@ -49,6 +49,8 @@ class GitterClient extends GitterObject
         @log 'info', "client ready in #{ Math.round(ms * 1000) / 1000 } milliseconds"
         @_isReady = yes
         @emit 'ready', ms
+    # finish initialization
+    @_created()
 
   # Get the session's user
   #

@@ -4,6 +4,15 @@ GitterRoom   = -> require './GitterRoom'
 # Handle a Gitter user
 class GitterUser extends GitterObject
 
+  # Creates a new user attached to the given client
+  #
+  # @param {GitterClient} client The client to be used
+  # @param {Object} data The user's data
+  constructor: ->
+    super
+    # finish initialization
+    @_created()
+
   # Get the login/user name of the user
   #
   # @return {String} User name

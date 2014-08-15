@@ -10,13 +10,15 @@ class GitterRoom extends GitterObject
   # @property {Boolean} Whether the session user joined that room or not
   _hasJoined: null
 
-  # Creates a new room and take care of loading its users
+  # Creates a new room
   #
   # @param {GitterClient} client The client to be used
   # @param {Object} data The room's data
   constructor: ->
     super
     @_hasJoined = no
+    # finish initialization
+    @_created()
 
   # Did we join the room yet?
   #

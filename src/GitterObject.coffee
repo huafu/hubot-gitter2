@@ -61,10 +61,8 @@ class GitterObject extends EventEmitter2
           res._data[key] = val
           updated.push key
       if updated.length
-        setTimeout (=>
-          cl.emit "#{ cn }.update", res, updated if (cl = res.client()) instanceof GitterClient()
-          res.emit 'update', updated
-        ), 1
+        cl.emit "#{ cn }.update", res, updated if (cl = res.client()) instanceof GitterClient()
+        res.emit 'update', updated
     else
       res = @_instances[clk][cn][data.id] = new @(client, data)
     res
@@ -114,9 +112,6 @@ class GitterObject extends EventEmitter2
     @on '*', ->
       self.log "{event::#{ @event }} #{ GitterObject.inspectArgs arguments }"
       return
-    # be sure this will run async, after any other constructor code
-    setTimeout (=> cl.emit "#{ @className() }.create", @), 1 if (cl = @client()) instanceof GitterClient()
-    @log "created"
 
   # Get the ID of that object
   #
@@ -184,6 +179,11 @@ class GitterObject extends EventEmitter2
       cl = @client()
     throw new Error("client #{ cl } is not ready yet") unless cl.isReady()
 
+  # To be called internally once the object has been created
+  _created: ->
+    if (cl = @client()) instanceof GitterClient()
+      cl.emit "#{ @className() }.create", @
+    @log "created"
 
 
 module.exports = GitterObject
