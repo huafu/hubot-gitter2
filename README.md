@@ -23,6 +23,16 @@ At the time this is written, here is the advantages of this one:
 - install **Hubot** and **CoffeeScript**: `npm install -g hubot coffeescript`
 - create your bot and install its dependencies: `hubot --create my-bot; cd my-bot; npm install`
 - save **hubot-gitter2** as dependency: `npm install --save hubot-gitter2`
-- start the bot using the right adapter: `HUBOT_GITTER_TOKEN=<your token> HUBOT_GITTER_ROOMS=<room URIs> ./bin/hubot -a gitter2`
-    - `HUBOT_GITTER_TOKEN`: get your personal token [there](http://developer.gitter.im) after sign-in
-    - `HUBOT_GITTER_ROOMS`: the rooms you want the bot to join (can be an org.: `my-org`, a repo: `user/repo` or a channel: `my-org/channel`)
+- start the bot using the right adapter: `HUBOT_GITTER2_TOKEN=<your token> ./bin/hubot -a gitter2`
+    - `HUBOT_GITTER2_TOKEN`: get your personal token [there](http://developer.gitter.im) after sign-in
+    - the bot will automatically listen on the rooms it has joined.
+
+## Changelog
+
+- **0.1.0** - `on his way`
+  - Re-wrote everything in a cleaner, object oriented way
+  - Better handling of users
+  - Auto-listening on the rooms the bot's user has already joined
+
+- **0.0.3** - `2014-08-11`
+  - First functional pre-version
