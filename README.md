@@ -29,10 +29,11 @@ At the time this is written, here is the advantages of this one:
 
 ## Changelog
 
-- **0.1.0** - `on his way`
+- **0.1.0** - `2014-08-16`
   - Re-wrote everything in a cleaner, object oriented way
   - Better handling of users
   - Auto-listening on the rooms the bot's user has already joined
+  - Do not overwrite brain user names, only update if not set
 
 - **0.0.3** - `2014-08-11`
   - First functional pre-version
