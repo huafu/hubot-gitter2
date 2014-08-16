@@ -215,7 +215,11 @@ class HubotGitter2Adapter extends Adapter
         avatarUrl: user.avatarUrl()
         url: user.url()
       for own k, v of d
-        robotUser[k] = v if v? and v isnt robotUser[k]
+        # only update the display name if it is not set
+        if k is 'name'
+          robotUser[k] = v if not robotUser[k] or robotUser[k] is user.id()
+        else
+          robotUser[k] = v if v? and v isnt robotUser[k]
     update()
     user.on 'update', update
 
