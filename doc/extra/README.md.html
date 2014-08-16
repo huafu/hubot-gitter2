@@ -48,9 +48,23 @@ to fix many missing things from it, I decided to write one from scratch.</p><p><
 <li>install <strong>Hubot</strong> and <strong>CoffeeScript</strong>: <code>npm install -g hubot coffeescript</code></li>
 <li>create your bot and install its dependencies: <code>hubot --create my-bot; cd my-bot; npm install</code></li>
 <li>save <strong>hubot-gitter2</strong> as dependency: <code>npm install --save hubot-gitter2</code></li>
-<li>start the bot using the right adapter: <code>HUBOT_GITTER_TOKEN=&lt;your token&gt; HUBOT_GITTER_ROOMS=&lt;room URIs&gt; ./bin/hubot -a gitter2</code><ul>
-<li><code>HUBOT_GITTER_TOKEN</code>: get your personal token <a href="http://developer.gitter.im">there</a> after sign-in</li>
-<li><code>HUBOT_GITTER_ROOMS</code>: the rooms you want the bot to join (can be an org.: <code>my-org</code>, a repo: <code>user/repo</code> or a channel: <code>my-org/channel</code>)</li>
+<li>start the bot using the right adapter: <code>HUBOT_GITTER2_TOKEN=&lt;your token&gt; ./bin/hubot -a gitter2</code><ul>
+<li><code>HUBOT_GITTER2_TOKEN</code>: get your personal token <a href="http://developer.gitter.im">there</a> after sign-in</li>
+<li>the bot will automatically listen on the rooms it has joined.</li>
+</ul>
+</li>
+</ul>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><p><strong>0.1.1</strong> - <code>2014-08-16</code></p><ul>
+<li>Re-wrote everything in a cleaner, object oriented way</li>
+<li>Better handling of users</li>
+<li>Auto-listening on the rooms the bot&#39;s user has already joined</li>
+<li>Do not overwrite brain user names, only update if not set</li>
+</ul>
+</li>
+<li><p><strong>0.0.3</strong> - <code>2014-08-11</code></p><ul>
+<li>First functional pre-version</li>
 </ul>
 </li>
 </ul>
@@ -58,7 +72,7 @@ to fix many missing things from it, I decided to write one from scratch.</p><p><
       </div>
     </div>
     <div id='footer'>
-  August 15, 14 08:57:01 by
+  August 16, 14 15:53:34 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
