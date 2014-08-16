@@ -1,6 +1,6 @@
 {
   "name": "hubot-gitter2",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Improved Hubot adapter for Gitter",
   "main": "src/gitter.coffee",
   "scripts": {
