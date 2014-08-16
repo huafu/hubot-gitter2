@@ -35,9 +35,9 @@ class GitterUser extends GitterObject
   #
   # @param {Boolean} full If true, the full URL is returned instead of just the path
   # @return {String} URL of the user's profile
-  url: (full = no) ->
+  url: (full = yes) ->
     if full
-      "https://www.github.com#{ @_data.url }"
+      "https://github.com#{ @_data.url }"
     else
       @_data.url
 
