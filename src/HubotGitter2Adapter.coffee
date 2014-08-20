@@ -167,6 +167,8 @@ class HubotGitter2Adapter extends Adapter
           @_log 'error', "error loading a user: #{ error }"
         else if user.isSessionUser()
           @_log "not handling a message from the bot user"
+        else if @_ignoreRoom(room)
+          @_log "not handling a message because in room #{ room }"
         else
           sender = @_hubotUser user
           sender.room = room.id()
@@ -174,7 +176,7 @@ class HubotGitter2Adapter extends Adapter
           msg.private = room.isOneToOne()
           try
             @robot.receive msg
-            @_log "handled message #{ msg.id }"
+            @_log "handled message #{ msg.id } in room #{ room }"
           catch err
             @_log 'error', "error handling message #{ msg.id }: #{ err }"
     # be sure to not return anything
@@ -190,6 +192,19 @@ class HubotGitter2Adapter extends Adapter
       message = level
       level = 'debug'
     @robot.logger[level] "[hubot-gitter2.#{ level }] #{ message }"
+
+
+  # Should we ignore message from the given room
+  #
+  # @param {GitterRoom} room The room to test
+  # @return {Boolean} Returns `true` if the room should be ignored, else `false`
+  _ignoreRoom: (room) ->
+    if (list = process.env.HUBOT_GITTER2_TESTING_ROOMS) and list = list.split(/\s*,\s*/g)
+      room.prettyIdentifier() not in list
+    else if (list = process.env.HUBOT_GITTER2_IGNORE_ROOMS) and list = list.split(/\s*,\s*/g)
+      room.prettyIdentifier() in list
+    else
+      no
 
 
   # Get the hubot user for the given GitterUser
