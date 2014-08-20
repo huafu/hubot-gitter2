@@ -207,6 +207,18 @@
   </li>
   <li>
     <span class='signature'>
+      <a href='#_ignoreRoom-dynamic'>
+        #
+(Boolean)
+<b>_ignoreRoom</b><span>(room)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Should we ignore message from the given room 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#_hubotUser-dynamic'>
         #
 (User)
@@ -612,6 +624,43 @@ source. Extend this.</p><p>Returns nothing.</p>
 </div>
   </div>
   <div class='method_details'>
+    <p class='signature' id='_ignoreRoom-dynamic'>
+      #
+(Boolean)
+<b>_ignoreRoom</b><span>(room)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Should we ignore message from the given room</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>room</span>
+      <span class='type'>
+        (
+          <tt><a href='../class/GitterRoom.html'>GitterRoom</a></tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The room to test </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Boolean</tt>
+      )
+      &mdash;
+      <span class='desc'>Returns <code>true</code> if the room should be ignored, else <code>false</code> </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
     <p class='signature' id='_hubotUser-dynamic'>
       #
 (User)
@@ -677,7 +726,7 @@ source. Extend this.</p><p>Returns nothing.</p>
 </div>
     </div>
     <div id='footer'>
-  August 16, 14 15:53:34 by
+  August 20, 14 09:34:38 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
