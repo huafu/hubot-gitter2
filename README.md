@@ -29,6 +29,10 @@ At the time this is written, here is the advantages of this one:
 
 ## Changelog
 
+- **0.1.3** - `2014-08-20`
+  - Added the ability to ignore all rooms except given one(s) for testing with `HUBOT_GITTER2_TESTING_ROOMS`
+  - Implemented a room ignore-list to not handle messages from some rooms with `HUBOT_GITTER2_IGNORE_ROOMS`
+
 - **0.1.2** - `2014-08-16`
   - Re-wrote everything in a cleaner, object oriented way
   - Better handling of users
