@@ -188,7 +188,7 @@ class GitterRoom extends GitterObject
   #
   # @return {String} A text identifying the object
   prettyIdentifier: ->
-    @uri()
+    @uri() ? @id()
 
   # Internally used to flag the room as joined or not
   #
