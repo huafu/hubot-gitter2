@@ -21,7 +21,14 @@ At the time this is written, here is the advantages of this one:
 ## Installation
 
 - install **Hubot** and **CoffeeScript**: `npm install -g hubot coffeescript`
-- create your bot and install its dependencies: `hubot --create my-bot; cd my-bot; npm install`
+- create your bot and install its dependencies:
+
+```
+npm install -g yo generator-hubot
+mkdir -p my-bot
+yo hubot
+```
+
 - save **hubot-gitter2** as dependency: `npm install --save hubot-gitter2`
 - start the bot using the right adapter: `HUBOT_GITTER2_TOKEN=<your token> ./bin/hubot -a gitter2`
     - `HUBOT_GITTER2_TOKEN`: get your personal token [there](http://developer.gitter.im) after sign-in
