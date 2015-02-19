@@ -20,7 +20,7 @@ At the time this is written, here is the advantages of this one:
 
 ## Installation
 
-- install **Hubot** and **CoffeeScript**: `npm install -g hubot coffeescript`
+- install **Hubot** and **CoffeeScript**: `npm install -g hubot coffee-script`
 - create your bot and install its dependencies:
 
 ```
