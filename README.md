@@ -30,7 +30,7 @@ yo hubot
 ```
 
 - save **hubot-gitter2** as dependency: `npm install --save hubot-gitter2`
-- start the bot using the right adapter: `HUBOT_GITTER2_TOKEN=<your token> ./bin/hubot -a gitter2`
+- start the bot using the right adapter: `HUBOT_GITTER2_TOKEN=<your token> ./bin/hubot -a gitter2 --name <your bot name>`
     - `HUBOT_GITTER2_TOKEN`: get your personal token [there](http://developer.gitter.im) after sign-in
     - the bot will automatically listen on the rooms it has joined.
 
