@@ -34,6 +34,10 @@ yo hubot
     - `HUBOT_GITTER2_TOKEN`: get your personal token [there](http://developer.gitter.im) after sign-in
     - the bot will automatically listen on the rooms it has joined.
 
+## Troubleshooting
+
+- If your bot is not responding to mentions, make sure hubot was started with the same `--name` parameter as its GitHub username.
+
 ## Changelog
 
 - **0.1.3** - `2014-08-20`
