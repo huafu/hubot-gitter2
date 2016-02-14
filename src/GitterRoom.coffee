@@ -1,6 +1,8 @@
 GitterObject = require './GitterObject'
 GitterUser   = -> require './GitterUser'
 
+USERS_LIMIT = 100
+
 # Gitter Room manipulations
 class GitterRoom extends GitterObject
 
@@ -71,8 +73,23 @@ class GitterRoom extends GitterObject
   #
   # @param {Function} callback The method to call once all users have ben loaded
   asyncUsers: (callback = ->) ->
+    getUsersPage = (page) =>
+      @_promise("users.all.#{page}", => @_data.users({
+        limit: USERS_LIMIT,
+        skip: page * USERS_LIMIT
+      }))
+
+    getUsers = () =>
+      do recur = (n = 0) ->
+        getUsersPage(n)
+        .then (users) ->
+          if users.length is USERS_LIMIT
+            recur(n + 1).then((xs) -> users.concat xs)
+          else
+            users
+
     @_ensureClientReady()
-    @_promise("users.all", => @_data.users())
+    getUsers()
     .then (users) =>
       @log "loaded #{ users.length } member users"
       parsedUsers = []
