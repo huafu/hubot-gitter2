@@ -128,6 +128,9 @@ class GitterClient extends GitterObject
   # @option options {String} login The user's login
   # @param {Function} callback The method to call once the user has been found
   asyncUser: (options, callback = ->) ->
+    if options.user
+      room = options.room
+      options = options.user
     @_ensureClientReady()
     if options.id
       prop = 'id'
@@ -139,6 +142,17 @@ class GitterClient extends GitterObject
     if (user = GitterObject.findBy @, GitterUser(), prop, val)
       @log "found user with #{ prop } `#{ val }`: #{ user }"
       callback null, user
+    else if prop is 'id' and room
+      room.asyncUsers (error, users) =>
+        if error
+          callback error
+        else if (user = GitterUser.findBy @, GitterUser, prop, val)
+          @log "found user with #{ prop } `#{ val }`: #{ user }"
+          callback null, user
+        else
+          msg = "unable to find user with #{ prop } `#{ val }: from the room #{ room.id() }"
+          @log 'error', msg
+          callback new Error(msg)
     else if prop is 'id'
       @_promise("users.find:#{ prop }:#{ val }", => @client().users.find(val))
       .then (u) =>
