@@ -162,7 +162,7 @@ class HubotGitter2Adapter extends Adapter
     if eventName is 'chatMessages.chatMessages' and data.operation is 'create'
       message = data.model
       cl = @gitterClient()
-      cl.asyncUser message.fromUser, (error, user) =>
+      cl.asyncUser {user: message.fromUser, room: room}, (error, user) =>
         if error
           @_log 'error', "error loading a user: #{ error }"
         else if user.isSessionUser()
