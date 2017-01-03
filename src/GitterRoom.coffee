@@ -1,7 +1,7 @@
 GitterObject = require './GitterObject'
 GitterUser   = -> require './GitterUser'
 
-USERS_LIMIT = 100
+USERS_LIMIT = 30
 
 # Gitter Room manipulations
 class GitterRoom extends GitterObject
