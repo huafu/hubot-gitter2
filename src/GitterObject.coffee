@@ -104,7 +104,7 @@ class GitterObject extends EventEmitter2
   # @param {Object} _data The core data of that gitter object
   # @option _data {String} id The id of that object
   constructor: (@_client, @_data) ->
-    throw new ReferenceError("no id given to create an object: #{ GitterObject.inspectArgs arguments }") unless _data?.id
+    throw new ReferenceError("no id given to create an object: #{ GitterObject.inspectArgs arguments }") unless @_data?.id
     # initialize our event emitter
     super {wildcard: yes, maxListeners: Infinity}
     @_promises = {}
