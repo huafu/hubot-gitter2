@@ -1,4 +1,4 @@
-{Adapter,TextMessage} = require 'hubot'
+{Adapter,TextMessage} = require.main.require 'hubot'
 GitterObject          = require './GitterObject'
 GitterClient          = require './GitterClient'
 GitterUser            = require './GitterUser'
